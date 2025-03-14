@@ -3,6 +3,7 @@ import com.habiba.newsapp.constants
 import com.habiba.newsapp.responce.Article
 import com.habiba.newsapp.responce.SourceResponse
 import com.habiba.newsapp.responce.TotalResponseObject
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -21,30 +22,55 @@ import retrofit2.http.Query
 * 6) then we passing this functions to the retrofit object which is responsible  for implementing this requests*/
 
 interface API_Interface {
-    @GET("v2/top-headlines")
+
+    @GET("top-headlines")
     suspend fun getHeadlines(
         @Query("country")
         countryCode:String?=null,
         @Query("category")
         category:String?=null,
+        @Query("pageSize") pageSize: Int = 100,
         @Query("apiKey")
         apiKey:String=constants.API_KEY
     ): Response<TotalResponseObject>
 
-    @GET("v2/top-headlines")
+    @GET("top-headlines")
     suspend fun getHeadlinesByCountryOnly(
         @Query("country")
         countryCode: String?,
+        @Query("pageSize") pageSize: Int = 50,
         @Query("apiKey")
         apiKey:String=constants.API_KEY
     ): Response<TotalResponseObject>
 
+    @GET("top-headlines")
+    suspend fun getHeadlinesByCategoryOnly(
+        @Query("category")
+        category: String?,
+        @Query("pageSize") pageSize: Int = 50,
+        @Query("apiKey")
+        apiKey:String=constants.API_KEY
+    ): Response<TotalResponseObject>
 
-    @GET("v2/everything")
+    @GET("top-headlines/sources")
+    fun getNewsSources(
+        @Query("pageSize") pageSize: Int = 50,
+        @Query("apiKey") apiKey: String = constants.API_KEY
+    ): Call<SourceResponse>  // ✅ Correct
+
+
+    @GET("everything")
     suspend fun searchForNews(
         @Query("q")
         keyword:String,
+        @Query("pageSize") pageSize: Int = 50,
         @Query("apiKey")
         apiKey:String=constants.API_KEY
-    )
+    ):Response<TotalResponseObject>
+    @GET("top-headlines")
+    suspend fun getNewsBySources(
+        @Query("sources") sources: String,
+        @Query("pageSize") pageSize: Int = 50,
+        @Query("apiKey") apiKey: String =constants.API_KEY
+    ): Response<TotalResponseObject>
 }

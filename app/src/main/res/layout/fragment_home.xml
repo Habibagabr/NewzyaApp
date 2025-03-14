@@ -1,105 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:overScrollMode="never"
     android:background="@color/background">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/bannerCard"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
-        <FrameLayout
+        <!-- Banner Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/bannerCard"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="200dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/bannerImage"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/newsphoto" />
+                android:layout_height="match_parent">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/roundimage" />
+                <ImageView
+                    android:id="@+id/bannerImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/newsphoto" />
 
-            <TextView
-                android:maxLines="2"
-                android:id="@+id/bannerheadline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginTop="100dp"
-                android:fontFamily="sans-serif-condensed-medium"
-                android:padding="10dp"
-                android:text="Reform UK Faces Internal Struggles"
-                android:textColor="#BFFFFFFF"
-                android:textSize="24sp"
-                android:textStyle="bold"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/roundimage" />
 
-            <TextView
-                android:id="@+id/bannerSource"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="165dp"
-                android:layout_marginStart="10dp"
-                android:textSize="18dp"
-                android:textStyle="bold"
-                android:textColor="#CCF24162"
-                android:text="BBC"/>
+                <TextView
+                    android:maxLines="2"
+                    android:id="@+id/bannerheadline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginTop="100dp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:padding="10dp"
+                    android:text="Reform UK Faces Internal Struggles"
+                    android:textColor="#BFFFFFFF"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
 
-            <ImageView
-                android:id="@+id/save"
-                android:layout_gravity="end"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/fav"/>
-        </FrameLayout>
-    </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/bannerSource"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="165dp"
+                    android:layout_marginStart="10dp"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:textColor="#CCF24162"
+                    android:text="BBC"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categoryRecyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bannerCard" />
+                <ImageView
+                    android:id="@+id/save"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/fav"/>
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
 
-    <Spinner
-        android:id="@+id/customSpinner"
-        android:layout_width="150dp"
-        android:layout_height="30dp"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryRecyclerview" />
+        <!-- Horizontal Category RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categoryRecyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bannerCard" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/newsRecyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/customSpinner"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-    />
+        <!-- Spinner -->
+        <Spinner
+            android:id="@+id/customSpinner"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/categoryRecyclerview" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- News RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/newsRecyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/customSpinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

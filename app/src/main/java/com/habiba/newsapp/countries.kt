@@ -4,6 +4,7 @@ class countries {
     companion object{
         // no country called is***ail , removing it is a must , free Palestine
         val countryMap = mapOf(
+            "" to "All Countries",
             "us" to "United States",
             "ae" to "United Arab Emirates",
             "ar" to "Argentina",

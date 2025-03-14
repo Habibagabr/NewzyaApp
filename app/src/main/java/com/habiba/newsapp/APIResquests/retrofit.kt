@@ -6,7 +6,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object retrofit {
-    private const val BASE_URL = "https://newsapi.org/"
+    private const val BASE_URL ="https://newsapi.org/v2/"
+
 
     // Step 1: Create Logging Interceptor
     private val loggingInterceptor = HttpLoggingInterceptor().apply {

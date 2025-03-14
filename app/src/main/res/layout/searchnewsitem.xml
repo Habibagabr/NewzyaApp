@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:padding="5dp"
+    android:padding="3dp"
     android:background="@color/background"
     android:layout_marginBottom="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -27,40 +27,16 @@
             android:scaleType="centerCrop"
             android:background="@drawable/newsimagestyle"
             android:clipToOutline="true"/>
-<ImageView
-    android:id="@+id/save"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/fav"
-    android:layout_marginTop="20dp"
-    android:layout_marginEnd="10dp"
-    android:layout_gravity="end">
-</ImageView>
+        <ImageView
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/fav"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="end">
+        </ImageView>
 
-        <TextView
-            android:id="@+id/newsCountry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="10dp"
-            android:text="@string/contaryname"
-            android:textColor="@color/white"
-            android:textSize="10dp"
-            android:textStyle="bold">
-        </TextView>
-        <TextView
-            android:id="@+id/newsCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="80dp"
-            android:text="@string/category"
-            android:textColor="@color/white"
-            android:textSize="10dp"
-            android:textStyle="bold">
-        </TextView>
         <TextView
             android:maxLines="2"
             android:id="@+id/newsHeadline"
@@ -89,7 +65,7 @@
         </TextView>
 
         <TextView
-            android:maxWidth="120dp"
+            android:maxWidth="70dp"
             android:id="@+id/newsSource"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
