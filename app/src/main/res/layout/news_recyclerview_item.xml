@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:padding="5dp"
+    android:background="@color/background"
+    android:layout_marginBottom="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/newsCard"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="170dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="6dp"
+        app:cardPreventCornerOverlap="true"
+        android:backgroundTint="#1B325B">
+
+        <ImageView
+            android:layout_gravity="center_vertical"
+            android:id="@+id/newsImage"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/newsphoto"
+            android:scaleType="centerCrop"
+            android:background="@drawable/newsimagestyle"
+            android:clipToOutline="true"/>
+<ImageView
+    android:id="@+id/save"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/fav"
+    android:layout_marginTop="20dp"
+    android:layout_marginEnd="10dp"
+    android:layout_gravity="end">
+</ImageView>
+
+        <TextView
+            android:id="@+id/newsCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="-10dp"
+            android:text="@string/contaryname"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+            android:textStyle="bold">
+        </TextView>
+        <TextView
+            android:id="@+id/newsCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="30dp"
+            android:text="@string/category"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+            android:textStyle="bold">
+        </TextView>
+        <TextView
+            android:maxLines="2"
+            android:id="@+id/newsHeadline"
+            android:padding="5dp"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="155dp"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:text="Reform UK Faces Internal Struggles "
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:textStyle="bold">
+
+        </TextView>
+        <TextView
+            android:id="@+id/newscontent"
+            android:text="habiba mohamed gabr ebrahim hossam eldiin ebrahim ahmed"
+            android:textColor="#CCFFFFFF"
+            android:maxLines="2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="160dp"
+            android:layout_marginTop="90dp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/newsSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="140dp"
+            android:layout_marginStart="160dp"
+            android:textStyle="bold"
+            android:textColor="#CCF24162"
+            android:text="BBC">
+
+        </TextView>
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

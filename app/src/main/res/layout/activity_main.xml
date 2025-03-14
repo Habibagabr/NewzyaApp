@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="@color/background"
+    tools:context=".Fragments.MainActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:title=""
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/appname"
+          android:fontFamily="sans-serif-condensed-medium"
+          android:textColor="#F24162"
+          android:textSize="30sp"
+          android:textStyle="bold|italic">
+      </TextView>
+        <ImageView
+            android:id="@+id/optionMenu"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/menue"
+            android:layout_gravity="end"
+            android:layout_marginEnd="20dp">
+
+        </ImageView>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/roundstyle"
+        android:elevation="20dp"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/homeicon"
+            style="@style/bottomNavigationImages"
+            android:background="@drawable/home">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/searchicon"
+            style="@style/bottomNavigationImages"
+            android:background="@drawable/search">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/favouriteicon"
+            style="@style/bottomNavigationImages"
+            android:background="@drawable/fav">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/settingicon"
+            style="@style/bottomNavigationImages"
+            android:layout_marginEnd="0dp"
+            android:background="@drawable/setting">
+
+        </ImageView>
+
+    </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/hostFragment"
+        android:name="com.habiba.newsapp.fragments.home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+</androidx.constraintlayout.widget.ConstraintLayout>
