@@ -10,17 +10,17 @@ import retrofit2.Call
 import retrofit2.Response
 
 class repository {
-    suspend fun getHeadlines(country: String?, category: String?): Response<TotalResponseObject> {
+     fun getHeadlines(country: String?, category: String?):  Call<SourceResponse>  {
         Log.d("NewsRepository", "API Request - Category: $category, Country: $country, API Key: ${constants.API_KEY}")
 
-        return retrofit.api.getHeadlines(country, category, 80,constants.API_KEY) // ✅ Correct reference
+        return retrofit.api.getHeadlines(country, category, 80,constants.API_KEY) //  Correct reference
     }
 
-    suspend fun getHeadlinesCountry(country:String?): Call<SourceResponse> {
-        return retrofit.api.getHeadlinesByCountryOnly(country,80,constants.API_KEY) // ✅ Correct reference
+     fun getHeadlinesCountry(country:String?): Call<SourceResponse> {
+        return retrofit.api.getHeadlinesByCountryOnly(country,80,constants.API_KEY) //  Correct reference
     }
 
-    suspend fun getSource(): Call<SourceResponse> {
+     fun getSource(): Call<SourceResponse> {
         return retrofit.api.getNewsSources(80,constants.API_KEY)
     }
 
@@ -28,8 +28,8 @@ class repository {
         val sourcesParam = sourceIds.joinToString(",") // Convert list to a comma-separated string
         return retrofit.api.getNewsBySources(sourcesParam,80)
     }
-    suspend fun getNewsByCategoryOnly(category:String,pageSize:Int):Response<TotalResponseObject>{
-        return retrofit.api.getHeadlinesByCategoryOnly(category,80,constants.API_KEY)
+     fun getNewsByCategoryOnly(category:String,pageSize:Int):Call<SourceResponse>{
+        return retrofit.api.getHeadlinesByCategoryOnly(category,pageSize,constants.API_KEY)
 
     }
     suspend fun getSearch(query:String):Response<TotalResponseObject>{

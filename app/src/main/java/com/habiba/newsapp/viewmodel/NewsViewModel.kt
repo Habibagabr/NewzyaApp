@@ -7,7 +7,9 @@ import com.habiba.newsapp.repository.repository
 import com.habiba.newsapp.responce.Article
 import com.habiba.newsapp.responce.SourceResponse
 import com.habiba.newsapp.responce.SourceX
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,7 +32,7 @@ class NewsViewModel(private val repository: repository) : ViewModel() {
         return articlesList[index]
     }
 
-    suspend fun fetchSource() {
+     fun fetchSource() {
         Log.d("SourceNewsViewModel", "Fetching source")
         val apiUrl = "https://newsapi.org/v2/top-headlines/sources?apiKey=${constants.API_KEY}"
         Log.d("SourceNewsViewModel", "API Request URL: $apiUrl")
@@ -73,38 +75,30 @@ class NewsViewModel(private val repository: repository) : ViewModel() {
         }
     }
 
-    fun fetchNewsByCountryandCategory(category: String?, country: String?) {
-        viewModelScope.launch {
-            try {
-                Log.d("NewsViewModel", "Fetching news for Category: $category, Country: $country")
+    suspend fun fetchNewsByCountryandCategory(category: String?, country: String?) {
+        Log.d("newsViewModel", "Fetching news for category=$category & country=$country")
 
-                val response = repository.getHeadlines(country, category)
+        withContext(Dispatchers.IO) { // Ensure network calls run in the background
+            try {
+                val call = repository.getHeadlines(country, category) // Still a Call<SourceResponse>
+                val response = call.execute() // ✅ Convert it to a synchronous call
 
                 if (response.isSuccessful) {
-                    val articles = response.body()?.articles ?: emptyList()
-
-                    // 🔹 Log full response to check why it's empty
-                    Log.d("NewsViewModel", "Full API Response: ${response.body()?.toString()}")
+                    val articles = response.body()?.sources ?: emptyList()
                     Log.d("NewsViewModel", "API Success - Articles Received: ${articles.size}")
-
-                    _newsLiveData.postValue(articles)
-                    // Correctly assign a random article
-                    _randomNewsLiveData.postValue(randomNewsGenerator(articles))
-
+                    _sourceLiveData.postValue(articles)
                 } else {
                     Log.e("NewsViewModel", "API Response Error - Code: ${response.code()}, Message: ${response.errorBody()?.string()}")
-                    _newsLiveData.postValue(emptyList())
-
+                    _sourceLiveData.postValue(emptyList())
                 }
             } catch (e: Exception) {
                 Log.e("NewsViewModel", "API Call Failed: ${e.message}", e)
-                _newsLiveData.postValue(emptyList())
+                _sourceLiveData.postValue(emptyList())
             }
         }
     }
 
-
-    suspend fun fetchNewsByCountryonly(country: String?) {
+     fun fetchNewsByCountryonly(country: String?) {
 
         repository.getHeadlinesCountry(country).enqueue(object : Callback<SourceResponse> {
             override fun onResponse(call: Call<SourceResponse>, response: Response<SourceResponse>) {
@@ -129,36 +123,23 @@ class NewsViewModel(private val repository: repository) : ViewModel() {
     }
 
 
-    fun fetchNewsByCategoryOnly(category:String){
-        viewModelScope.launch {
+    suspend fun fetchNewsByCategoryOnly(category:String){
+        withContext(Dispatchers.IO) { // Ensure network calls run in the background
             try {
-                val response = repository.getNewsByCategoryOnly(category,80)
+                val call = repository.getNewsByCategoryOnly(category,80) // Still a Call<SourceResponse>
+                val response = call.execute() //  Convert it to a synchronous call
 
                 if (response.isSuccessful) {
-                    val articles = response.body()?.articles ?: emptyList()
-                    Log.d("NewsViewModel", "API Success - Articles Fetched: ${articles.size} , for category {$category}")
-                    if(articles.isEmpty())
-                    {
-                        _newsLiveData.postValue(emptyList())
-
-
-                    }
-                    else
-                    {
-                        _newsLiveData.postValue(articles)
-
-                        // Correctly assign a random article
-                        _randomNewsLiveData.postValue(randomNewsGenerator(articles))
-
-                    }
-
+                    val articles = response.body()?.sources ?: emptyList()
+                    Log.d("NewsViewModel333", "API Success - Articles Received: ${articles.size}")
+                    _sourceLiveData.postValue(articles)
                 } else {
                     Log.e("NewsViewModel", "API Response Error - Code: ${response.code()}, Message: ${response.errorBody()?.string()}")
-                    _newsLiveData.postValue(emptyList())
+                    _sourceLiveData.postValue(emptyList())
                 }
             } catch (e: Exception) {
                 Log.e("NewsViewModel", "API Call Failed: ${e.message}", e)
-                _newsLiveData.postValue(emptyList())
+                _sourceLiveData.postValue(emptyList())
             }
         }
 

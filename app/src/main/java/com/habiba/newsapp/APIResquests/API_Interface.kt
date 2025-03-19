@@ -23,8 +23,8 @@ import retrofit2.http.Query
 
 interface API_Interface {
 
-    @GET("top-headlines")
-    suspend fun getHeadlines(
+    @GET("top-headlines/sources")
+     fun getHeadlines(
         @Query("country")
         countryCode:String?=null,
         @Query("category")
@@ -32,7 +32,7 @@ interface API_Interface {
         @Query("pageSize") pageSize: Int = 100,
         @Query("apiKey")
         apiKey:String=constants.API_KEY
-    ): Response<TotalResponseObject>
+    ): Call<SourceResponse>
 
     @GET("top-headlines/sources")
     fun getHeadlinesByCountryOnly(
@@ -43,20 +43,20 @@ interface API_Interface {
     ): Call<SourceResponse>
 
 
-    @GET("top-headlines")
-    suspend fun getHeadlinesByCategoryOnly(
+    @GET("top-headlines/sources")
+     fun getHeadlinesByCategoryOnly(
         @Query("category")
         category: String?,
         @Query("pageSize") pageSize: Int = 50,
         @Query("apiKey")
         apiKey:String=constants.API_KEY
-    ): Response<TotalResponseObject>
+    ): Call<SourceResponse>
 
     @GET("top-headlines/sources")
     fun getNewsSources(
         @Query("pageSize") pageSize: Int = 50,
         @Query("apiKey") apiKey: String = constants.API_KEY
-    ): Call<SourceResponse>  // ✅ Correct
+    ): Call<SourceResponse>  //  Correct
 
 
     @GET("everything")
