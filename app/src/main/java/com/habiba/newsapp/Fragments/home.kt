@@ -2,6 +2,8 @@ package com.habiba.newsapp.fragments
 
 import CategoryRecyclerAdapter
 import NewsRecyclerView
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,11 +11,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +41,7 @@ class home : Fragment() {
     private lateinit var bannerHeader: TextView
     private lateinit var bannerSource: TextView
     private lateinit var spinner: Spinner
+  private lateinit var frameCard: FrameLayout
 
     private var selectedCategory: String? = null
     private var selectedCountry: String ?= null // Default country
@@ -58,13 +61,27 @@ class home : Fragment() {
         val factory = NewsViewModelFactory(newsRepository)
         newsViewModel = ViewModelProvider(this, factory)[NewsViewModel::class.java]
 
-        observeSourceData()
         observeNewsData()
+        observeSourceData()
         observeRandomNews()
 
-        // 🔹 Always fetch news after setting up UI
+        //  Always fetch news after setting up UI
         fetchNews()
-
+        //  Set a click listener that updates dynamically later
+        frameCard.setOnClickListener {
+            val currentArticle = newsViewModel.randomNewsLiveData.value  // Get latest article
+            if (!currentArticle?.url.isNullOrEmpty()) {
+                Log.d("NewsFragment", " Opening URL: ${currentArticle?.url}")
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(currentArticle?.url))
+                try {
+                    requireContext().startActivity(intent)
+                } catch (e: Exception) {
+                    Log.e("NewsFragment", " Error opening URL: ${e.message}")
+                }
+            } else {
+                Log.e("NewsFragment", " No URL found for this article")
+            }
+        }
         return view
     }
 
@@ -75,6 +92,7 @@ class home : Fragment() {
         categoryRecyclerView = view.findViewById(R.id.categoryRecyclerview)
         newsRecyclerView = view.findViewById(R.id.newsRecyclerview)
         spinner = view.findViewById(R.id.customSpinner)
+        frameCard = view.findViewById(R.id.FrameCardHome)
 
         setupCategoryRecyclerView()
         setupCountrySpinner()
@@ -85,8 +103,8 @@ class home : Fragment() {
         categoryRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
         categoryAdapter = CategoryRecyclerAdapter(categoryList) { category ->
-            selectedCategory = if (category == selectedCategory) null else category // Toggle selection
-            fetchNews() // 🔹 Call fetchNews() to update RecyclerView
+            selectedCategory = if (category == selectedCategory) selectedCategory else category // Toggle selection
+            fetchNews() //  Call fetchNews() to update RecyclerView
         }
 
         categoryRecyclerView.adapter = categoryAdapter
@@ -102,7 +120,7 @@ class home : Fragment() {
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 selectedCountry = countryMap.keys.toList()[position] // Get the selected country key
-                fetchNews() // 🔹 Fetch news whenever the country changes
+                fetchNews() //  Fetch news whenever the country changes
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -112,7 +130,7 @@ class home : Fragment() {
 
     private fun setupNewsRecyclerView() {
         newsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        newsAdapter = NewsRecyclerView(emptyList(), mutableListOf())
+        newsAdapter = NewsRecyclerView(emptyList(), mutableListOf(), countryMap,selectedCategory?:"general")
         newsRecyclerView.adapter = newsAdapter
 
     }
@@ -125,11 +143,13 @@ class home : Fragment() {
 
             if (articles.isEmpty()) {
                 Log.w("HomeFragment", "Warning: No articles received. RecyclerView might be empty.")
+                newsAdapter.updateNews(emptyList())
+
             }
 
-            newsAdapter.updateNews(articles)
+            newsAdapter.updateNews(articles, selectedCategory ?: "general")
 
-            // ✅ Update banner with first article
+            // Update banner with first article
             if (articles.isNotEmpty()) {
                 val randomArticle = newsViewModel.randomNewsGenerator(articles)
                 randomArticle?.let {
@@ -151,6 +171,9 @@ class home : Fragment() {
 
             if (sourceList.isEmpty()) {
                 Log.w("HomeFragment", "Warning: No sources received.")
+                newsAdapter.updateSources(emptyList())
+                newsAdapter.updateNews(emptyList())
+
             } else {
                 val sourceIds = sourceList.mapNotNull { it?.id }
 
@@ -162,8 +185,8 @@ class home : Fragment() {
                 }
             }
 
-            // ✅ Update the sources in the adapter when new sources arrive
-            newsAdapter.updateSources(sourceList.filterNotNull())
+            // Update the sources in the adapter when new sources arrive
+            newsAdapter.updateSources(sourceList)
         }
     }
 
@@ -173,19 +196,26 @@ class home : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             when {
                 !selectedCategory.isNullOrEmpty() && !selectedCountry.isNullOrEmpty() -> {
-                    // ✅ Fetch news filtered by both category and country
+                    // Fetch news filtered by both category and country
+                    Log.d("NewsFragment", "we have category = {$selectedCategory} and country = {$selectedCountry}")
                     newsViewModel.fetchNewsByCountryandCategory(selectedCategory, selectedCountry)
                 }
                 !selectedCategory.isNullOrEmpty() -> {
-                    // ✅ Fetch news filtered by category only
+                    //  Fetch news filtered by category only
+                    Log.d("NewsFragment", "we only have category = {$selectedCategory} ")
+
                     newsViewModel.fetchNewsByCategoryOnly(selectedCategory!!)
                 }
                 !selectedCountry.isNullOrEmpty() -> {
-                    // ✅ Fetch news filtered by country only
+                    Log.d("NewsFragment", "we only have country = {$selectedCountry}")
+
+                    // Fetch news filtered by country only
                     newsViewModel.fetchNewsByCountryonly(selectedCountry)
                 }
                 else -> {
-                    // ✅ If no filters are selected, fetch general news
+                    Log.d("NewsFragment", "we don't have category = {$selectedCategory} and country = {$selectedCountry}")
+
+                    //  If no filters are selected, fetch general news
                     newsViewModel.fetchSource()
                 }
             }
@@ -195,14 +225,31 @@ class home : Fragment() {
 
 
     private fun observeRandomNews() {
-        newsViewModel.randomNewsLiveData.observe(viewLifecycleOwner, Observer { article ->
-            article?.let {
-                bannerSource.text = it.source.name ?: "Unknown Source"
-                bannerHeader.text = it.title ?: "No Title"
-                Glide.with(requireContext()).load(it.urlToImage).into(bannerImage)
+        newsViewModel.randomNewsLiveData.observe(viewLifecycleOwner) { article ->
+            article?.let { newsArticle ->
+                bannerSource.text = newsArticle.source.name ?: "Unknown Source"
+                bannerHeader.text = newsArticle.title ?: "No Title"
+                Glide.with(requireContext()).load(newsArticle.urlToImage).into(bannerImage)
+
+//                // Always set the click listener, even if URL is empty
+//                frameCard.setOnClickListener {
+//                    if (!newsArticle.url.isNullOrEmpty()) {
+//                        Log.d("NewsFragment", "Opening URL: ${newsArticle.url}")
+//                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(newsArticle.url))
+//                        try {
+//                            requireContext().startActivity(intent)
+//                        } catch (e: Exception) {
+//                            Log.e("NewsFragment", "Error opening URL: ${e.message}")
+//                        }
+//                    } else {
+//                        Log.e("NewsFragment", "No URL found for this article")
+//                    }
+//                }
             }
-        })
+        }
     }
+
+
 
 
 

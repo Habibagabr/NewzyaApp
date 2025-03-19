@@ -25,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <FrameLayout
+                android:id="@+id/FrameCardHome"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -98,7 +99,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/categoryRecyclerview" />
+            android:prompt="@string/spinner_prompt"
+            app:layout_constraintTop_toBottomOf="@+id/categoryRecyclerview"
+            tools:ignore="HardcodedText" />
 
         <!-- News RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView

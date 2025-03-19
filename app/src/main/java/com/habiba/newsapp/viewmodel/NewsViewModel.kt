@@ -104,29 +104,30 @@ class NewsViewModel(private val repository: repository) : ViewModel() {
     }
 
 
-    fun fetchNewsByCountryonly(country: String?) {
-        viewModelScope.launch {
-            try {
-                val response = repository.getHeadlinesCountry(country)
+    suspend fun fetchNewsByCountryonly(country: String?) {
 
+        repository.getHeadlinesCountry(country).enqueue(object : Callback<SourceResponse> {
+            override fun onResponse(call: Call<SourceResponse>, response: Response<SourceResponse>) {
                 if (response.isSuccessful) {
-                    val articles = response.body()?.articles ?: emptyList()
+                    val articles = response.body()?.sources ?: emptyList()
                     Log.d("NewsViewModel", "API Success - Articles Fetched: ${articles.size}")
-                    _newsLiveData.postValue(articles)
+                    _sourceLiveData.postValue(articles)
 
-                    // Correctly assign a random article
-                    _randomNewsLiveData.postValue(randomNewsGenerator(articles))
-
+                    // Assign a random article
+//                    _randomNewsLiveData.postValue(randomNewsGenerator(articles))
                 } else {
                     Log.e("NewsViewModel", "API Response Error - Code: ${response.code()}, Message: ${response.errorBody()?.string()}")
-                    _newsLiveData.postValue(emptyList())
+                    _sourceLiveData.postValue(emptyList())
                 }
-            } catch (e: Exception) {
-                Log.e("NewsViewModel", "API Call Failed: ${e.message}", e)
-                _newsLiveData.postValue(emptyList())
             }
-        }
+
+            override fun onFailure(call: Call<SourceResponse>, t: Throwable) {
+                Log.e("NewsViewModel", "API Call Failed: ${t.message}", t)
+                _sourceLiveData.postValue(emptyList())
+            }
+        })
     }
+
 
     fun fetchNewsByCategoryOnly(category:String){
         viewModelScope.launch {
@@ -135,11 +136,21 @@ class NewsViewModel(private val repository: repository) : ViewModel() {
 
                 if (response.isSuccessful) {
                     val articles = response.body()?.articles ?: emptyList()
-                    Log.d("NewsViewModel", "API Success - Articles Fetched: ${articles.size}")
-                    _newsLiveData.postValue(articles)
+                    Log.d("NewsViewModel", "API Success - Articles Fetched: ${articles.size} , for category {$category}")
+                    if(articles.isEmpty())
+                    {
+                        _newsLiveData.postValue(emptyList())
 
-                    // Correctly assign a random article
-                    _randomNewsLiveData.postValue(randomNewsGenerator(articles))
+
+                    }
+                    else
+                    {
+                        _newsLiveData.postValue(articles)
+
+                        // Correctly assign a random article
+                        _randomNewsLiveData.postValue(randomNewsGenerator(articles))
+
+                    }
 
                 } else {
                     Log.e("NewsViewModel", "API Response Error - Code: ${response.code()}, Message: ${response.errorBody()?.string()}")

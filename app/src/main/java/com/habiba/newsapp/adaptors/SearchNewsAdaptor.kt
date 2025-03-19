@@ -1,3 +1,5 @@
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -30,7 +32,7 @@ class SearchNewsAdaptor(
     override fun onBindViewHolder(holder:SearchNewsAdaptorViewHolder , position: Int) {
         val newsItem = articles[position]
 
-        Log.d("NewsRecyclerView", "🔹 Binding ViewHolder - Position: $position, Title: ${newsItem.title}")
+        Log.d("NewsRecyclerView", " Binding ViewHolder - Position: $position, Title: ${newsItem.title}")
 
         Glide.with(holder.itemView.context)
             .load(newsItem.urlToImage)
@@ -42,13 +44,23 @@ class SearchNewsAdaptor(
         holder.source.text = newsItem.source.name ?: "Unknown Source"
         holder.content.text = newsItem.content ?: "No Content"
         holder.date.text = newsItem.publishedAt.substringBefore("T")
+        // 🔹 Open URL when user clicks on item
+        holder.itemView.setOnClickListener {
+            val url = newsItem.url  // Get URL from API response
+            if (!url.isNullOrEmpty()) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                holder.itemView.context.startActivity(intent)  // Open the article in a browser
+            } else {
+                Log.e("NewsRecyclerView", " No URL found for this article")
+            }
+        }
     }
 
     override fun getItemCount(): Int = articles.size
 
     fun updateNews(newArticles: List<Article>) {
         articles = newArticles
-        notifyDataSetChanged()  // 🔥 Refresh RecyclerView when news updates
+        notifyDataSetChanged()  //  Refresh RecyclerView when news updates
     }
 
 }

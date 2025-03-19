@@ -34,14 +34,14 @@ interface API_Interface {
         apiKey:String=constants.API_KEY
     ): Response<TotalResponseObject>
 
-    @GET("top-headlines")
-    suspend fun getHeadlinesByCountryOnly(
-        @Query("country")
-        countryCode: String?,
-        @Query("pageSize") pageSize: Int = 50,
-        @Query("apiKey")
-        apiKey:String=constants.API_KEY
-    ): Response<TotalResponseObject>
+    @GET("top-headlines/sources")
+    fun getHeadlinesByCountryOnly(
+        @Query("country") country: String? = "za",
+        @Query("pageSize") pageSize: Int = 100,
+        @Query("apiKey")apiKey:String=constants.API_KEY
+
+    ): Call<SourceResponse>
+
 
     @GET("top-headlines")
     suspend fun getHeadlinesByCategoryOnly(
@@ -67,6 +67,7 @@ interface API_Interface {
         @Query("apiKey")
         apiKey:String=constants.API_KEY
     ):Response<TotalResponseObject>
+
     @GET("top-headlines")
     suspend fun getNewsBySources(
         @Query("sources") sources: String,

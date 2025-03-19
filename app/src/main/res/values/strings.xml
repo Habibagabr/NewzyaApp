@@ -6,4 +6,6 @@
     <string name="home_fragment">Home fragment</string>
     <string name="contaryname"><u>Egypt</u></string>
     <string name="category"><u>Business</u></string>
+    <string name="spinner_prompt">All Countries</string>
+
 </resources>

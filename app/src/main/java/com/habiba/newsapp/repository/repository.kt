@@ -16,7 +16,7 @@ class repository {
         return retrofit.api.getHeadlines(country, category, 80,constants.API_KEY) // ✅ Correct reference
     }
 
-    suspend fun getHeadlinesCountry(country:String?):Response<TotalResponseObject>{
+    suspend fun getHeadlinesCountry(country:String?): Call<SourceResponse> {
         return retrofit.api.getHeadlinesByCountryOnly(country,80,constants.API_KEY) // ✅ Correct reference
     }
 
