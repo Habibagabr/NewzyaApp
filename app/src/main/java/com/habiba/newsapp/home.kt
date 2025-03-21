@@ -1,4 +1,4 @@
-package com.habiba.newsapp.fragments
+package com.habiba.newsapp
 
 import CategoryRecyclerAdapter
 import NewsRecyclerView

@@ -4,7 +4,7 @@ class constants {
 
     //Companion object let us access the variables / methods without taking an object from the class " same as static in java"
     companion object{
-        const val API_KEY="2137e3d1cf414d0fafe58617539f6757"
+        const val API_KEY="f650903b2d204221980ca81b07e3b8cc"
         const val BASE_URL="https://newsapi.org"
         //between each search request and other = 500ms = 0.5sec
         const val SEARCH_NEWS_TIME_DELAY="500L"

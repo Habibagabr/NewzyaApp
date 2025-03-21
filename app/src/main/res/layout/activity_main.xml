@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:background="@color/background"
-    tools:context=".Fragments.MainActivity">
+    android:background="@color/background">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         app:title=""
@@ -20,7 +19,7 @@
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="@string/appname"
+          android:text="NEWSLY"
           android:fontFamily="sans-serif-condensed-medium"
           android:textColor="#F24162"
           android:textSize="30sp"
@@ -84,7 +83,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/hostFragment"
-        android:name="com.habiba.newsapp.fragments.home"
+        android:name="com.habiba.newsapp.home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

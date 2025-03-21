@@ -1,4 +1,4 @@
-package com.habiba.newsapp.Fragments
+package com.habiba.newsapp
 
 import android.os.Bundle
 import android.view.LayoutInflater
