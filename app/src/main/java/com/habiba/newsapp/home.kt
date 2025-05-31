@@ -119,7 +119,7 @@ class home : Fragment() {
         categoryAdapter = CategoryRecyclerAdapter(categoryList) { category ->
             selectedCategory =
                 if (category == selectedCategory) selectedCategory else category // Toggle selection
-            fetchNews() //  Call fetchNews() to update RecyclerView
+            fetchNews()
         }
 
         categoryRecyclerView.adapter = categoryAdapter
@@ -170,7 +170,6 @@ class home : Fragment() {
             if (articles.isEmpty()) {
                 Log.w("HomeFragment", "Warning: No articles received. RecyclerView might be empty.")
                 animation.setAnimation(R.raw.notfound)
-                animation.setAnimation(R.raw.notfound)
                 animation.repeatCount = LottieDrawable.INFINITE // Loop animation
                 animation.speed = 0.5f
                 animation.playAnimation()
@@ -187,8 +186,8 @@ class home : Fragment() {
                 val randomArticle = newsViewModel.randomNewsGenerator(articles)
                 randomArticle?.let {
                     Glide.with(requireContext()).load(it.urlToImage).into(bannerImage)
-                    bannerSource.text = it.source.name ?: "Unknown Source"
-                    bannerHeader.text = it.title ?: "No Title"
+                    bannerSource.text = it.source.name
+                    bannerHeader.text = it.title
                 }
             }
         }

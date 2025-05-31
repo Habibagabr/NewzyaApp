@@ -3,6 +3,7 @@ package com.habiba.newsapp
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.Button
@@ -12,6 +13,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.habiba.newsapp.responce.Article
+import com.habiba.newsapp.responce.favouritesData
 
 
 class signup : AppCompatActivity() {
@@ -78,7 +83,37 @@ class signup : AppCompatActivity() {
                         user?.sendEmailVerification()
                             ?.addOnCompleteListener { verifyTask ->
                                 if (verifyTask.isSuccessful) {
-                                    showMessage("Sign Up Successful", "Please verify your email before logging in.") {
+                                    val db = FirebaseFirestore.getInstance()
+                                    val userId =
+                                        FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                                    constants.userID = userId;
+
+                                    val userData = hashMapOf(
+                                        "articlesList" to emptyList<favouritesData>(),
+                                        "userId" to userId
+                                    )
+
+                                    db.collection("Favourites")
+                                        .document(userId)  // Uses the UID as the document ID
+                                        .set(userData)
+                                        .addOnSuccessListener {
+                                            Log.d(
+                                                "Firestore",
+                                                "✅ Document successfully created for user: $userId"
+                                            )
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.e(
+                                                "Firestore",
+                                                " Error adding document: ${e.message}",
+                                                e
+                                            )
+
+                                    }
+
+                                    /////////////////////////////////////////////////////////////////////////
+                                    showMessage("Sign Up Successful", "Please verify your email before logging in.")
+                                    {
                                         startActivity(Intent(this, signin::class.java))
                                         finish()
                                     }

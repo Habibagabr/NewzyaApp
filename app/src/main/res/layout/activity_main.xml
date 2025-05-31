@@ -71,14 +71,6 @@
 
         </ImageView>
 
-        <ImageView
-            android:id="@+id/settingicon"
-            style="@style/bottomNavigationImages"
-            android:layout_marginEnd="0dp"
-            android:background="@drawable/setting">
-
-        </ImageView>
-
     </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView

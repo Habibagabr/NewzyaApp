@@ -12,6 +12,7 @@ class constants {
         //when loading all at once it consume more and more time and memory
         //split data into pages per request called "paging"
         const val QUERY_PAGE_SIZE="20"
+        var userID="";
 
 
 

@@ -55,13 +55,13 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.hostFragment, Displayedfragment) // Replace container with fragment
                 .commit()
         }
-        binding.settingicon.setOnClickListener {
-            selectIcon(binding.settingicon)
-            Displayedfragment= setting()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.hostFragment, Displayedfragment) // Replace container with fragment
-                .commit()
-        }
+//        binding.settingicon.setOnClickListener {
+//            selectIcon(binding.settingicon)
+//            Displayedfragment= setting()
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.hostFragment, Displayedfragment) // Replace container with fragment
+//                .commit()
+//        }
 
     }
 
@@ -74,14 +74,14 @@ class MainActivity : AppCompatActivity() {
         // Handle menu item clicks
         popupMenu.setOnMenuItemClickListener { item: MenuItem ->
             when (item.itemId) {
-                R.id.action_settings -> {
-                    // Handle Settings Click
-                    true
-                }
-                R.id.action_profile -> {
-                    // Handle Profile Click
-                    true
-                }
+//                R.id.action_settings -> {
+//                    // Handle Settings Click
+//                    true
+//                }
+//                R.id.action_profile -> {
+//                    // Handle Profile Click
+//                    true
+//                }
                 R.id.action_logout -> {
                     FirebaseAuth.getInstance().signOut()
                     startActivity(Intent(this, signup::class.java))
@@ -102,14 +102,14 @@ class MainActivity : AppCompatActivity() {
         binding.homeicon.setBackgroundResource(R.drawable.home)
         binding.searchicon.setBackgroundResource(R.drawable.search)
         binding.favouriteicon.setBackgroundResource(R.drawable.fav)
-        binding.settingicon.setBackgroundResource(R.drawable.setting)
+//        binding.settingicon.setBackgroundResource(R.drawable.setting)
 
         // Set the correct clicked icon background
         when (selectedIcon.id) {
             R.id.homeicon -> selectedIcon.setBackgroundResource(R.drawable.homeclicked)
             R.id.searchicon -> selectedIcon.setBackgroundResource(R.drawable.searchclicked)
             R.id.favouriteicon -> selectedIcon.setBackgroundResource(R.drawable.favclicked)
-            R.id.settingicon -> selectedIcon.setBackgroundResource(R.drawable.settingclicked)
+//            R.id.settingicon -> selectedIcon.setBackgroundResource(R.drawable.settingclicked)
         }
     }
 

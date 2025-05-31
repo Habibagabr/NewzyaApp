@@ -20,9 +20,9 @@
             android:layout_height="200dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <FrameLayout
                 android:id="@+id/FrameCardHome"
@@ -42,7 +42,6 @@
                     android:background="@drawable/roundimage" />
 
                 <TextView
-                    android:maxLines="2"
                     android:id="@+id/bannerheadline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -53,7 +52,8 @@
                     android:text="Reform UK Faces Internal Struggles"
                     android:textColor="#BFFFFFFF"
                     android:textSize="24sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:maxLines="2" />
 
                 <TextView
                     android:id="@+id/bannerSource"
@@ -61,34 +61,33 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="165dp"
                     android:layout_marginStart="10dp"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="#CCF24162"
-                    android:text="BBC"/>
+                    android:text="BBC" />
 
                 <ImageView
                     android:id="@+id/save"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_gravity="end"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:src="@drawable/fav"/>
+                    android:src="@drawable/fav" />
             </FrameLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Horizontal Category RecyclerView -->
+        <!-- Category RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/categoryRecyclerview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:padding="10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@id/bannerCard"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bannerCard" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+             />
 
         <!-- Spinner -->
         <Spinner
@@ -96,11 +95,10 @@
             android:layout_width="150dp"
             android:layout_height="30dp"
             android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
             android:prompt="@string/spinner_prompt"
-            app:layout_constraintTop_toBottomOf="@+id/categoryRecyclerview"
+            app:layout_constraintTop_toBottomOf="@id/categoryRecyclerview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="HardcodedText" />
 
         <!-- News RecyclerView -->
@@ -111,51 +109,46 @@
             android:layout_marginBottom="25dp"
             android:nestedScrollingEnabled="false"
             android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/customSpinner"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Lottie Animation & Message -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_marginTop="320dp"
-            android:layout_width="300dp"
+            android:id="@+id/emptyLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/newsRecyclerview"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone">
 
             <com.airbnb.lottie.LottieAnimationView
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/lottieAnimationView"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/notfound"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/lottieAnimationView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/notfound" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
             <TextView
                 android:id="@+id/animtext"
-                android:textColor="#CCF24162"
-                android:textAlignment="center"
-                android:textSize="18dp"
-                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="No news articles found for the selected filters."
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textColor="#CCF24162"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textAlignment="center"
                 app:layout_constraintTop_toBottomOf="@id/lottieAnimationView"
-                app:layout_constraintEnd_toEndOf="parent">
-
-
-            </TextView>
-
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

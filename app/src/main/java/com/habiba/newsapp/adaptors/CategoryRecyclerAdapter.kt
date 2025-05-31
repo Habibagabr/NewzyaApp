@@ -14,7 +14,7 @@ class CategoryRecyclerAdapter(
     private val onCategorySelected: (String) -> Unit
 ) : RecyclerView.Adapter<CategoryRecyclerAdapter.CategoryViewHolder>() {
 
-    private var selectedPosition: Int = 0 // 🔹 Default selection to first item
+    private var selectedPosition: Int = 0 //  Default selection to first item
 
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val categoryText: TextView = itemView.findViewById(R.id.categoryText)

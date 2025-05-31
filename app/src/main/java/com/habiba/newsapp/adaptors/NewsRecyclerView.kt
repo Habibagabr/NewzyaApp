@@ -8,17 +8,25 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.habiba.newsapp.R
 import com.habiba.newsapp.countries.Companion.countryMap
 import com.habiba.newsapp.responce.Article
 import com.habiba.newsapp.responce.SourceX
+import com.habiba.newsapp.responce.favouritesData
+import com.habiba.newsapp.viewmodel.favouritesViewmodel
 
 class NewsRecyclerView(
     private var articles: List<Article>,
     private var sources: MutableList<SourceX>  ,
     private var countriesMap: Map<String,String> = countryMap,
-    private var categoryy:String?="general"
+    private var categoryy:String?="general",
 ) : RecyclerView.Adapter<NewsRecyclerView.NewsRecyclerViewHolder>() {
+
+    val currentuserid= FirebaseAuth.getInstance().currentUser?.uid
+    val db=FirebaseFirestore.getInstance()
+    private val favouritesVM=favouritesViewmodel();
 
     class NewsRecyclerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageNews: ImageView = itemView.findViewById(R.id.newsImage)
@@ -28,13 +36,16 @@ class NewsRecyclerView(
         val headline: TextView = itemView.findViewById(R.id.newsHeadline)
         val content: TextView = itemView.findViewById(R.id.newscontent)
         val date:TextView=itemView.findViewById(R.id.Newsdate)
+        val save:ImageView=itemView.findViewById(R.id.save)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsRecyclerViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.news_recyclerview_item, parent, false)
         return NewsRecyclerViewHolder(view)
     }
+
 
     override fun onBindViewHolder(holder: NewsRecyclerViewHolder, position: Int) {
         val newsItem = articles[position]
@@ -47,9 +58,7 @@ class NewsRecyclerView(
             .error(R.drawable.no_image_found)
             .into(holder.imageNews)
 
-
-
-        val sourceId = newsItem.source.id?.trim()?.lowercase() ?: ""
+        val sourceId = newsItem.source.id.trim().lowercase()
             Log.d("NewsRecyclerView", " News Item Source ID: '$sourceId'")
         val sourceDetails = sources.find { it.id.trim().lowercase() == sourceId }
 
@@ -68,7 +77,7 @@ class NewsRecyclerView(
             }
 
 
-            var countryKey = sourceDetails?.country ?: ""
+            val countryKey = sourceDetails?.country ?: ""
             if (countryKey == "")
                 holder.country.text = ""
             else {
@@ -83,9 +92,11 @@ class NewsRecyclerView(
             holder.source.text = newsItem.source.name ?: "Unknown Source"
             holder.content.text = newsItem.content ?: "No Content"
             holder.date.text = newsItem.publishedAt.substringBefore("T")
-            // 🔹 Open URL when user clicks on item
+
+         val url = newsItem.url  // Get URL from API response
+            // Open URL when user clicks on item
             holder.itemView.setOnClickListener {
-                val url = newsItem.url  // Get URL from API response
+
                 if (!url.isNullOrEmpty()) {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                     holder.itemView.context.startActivity(intent)  // Open the article in a browser
@@ -93,6 +104,57 @@ class NewsRecyclerView(
                     Log.e("NewsRecyclerView", "No URL found for this article")
                 }
             }
+        val favItem=favouritesData(
+            newsItem.content,
+            newsItem.description,
+            newsItem.publishedAt,
+            newsItem.source.name,
+            newsItem.title,
+            newsItem.url,
+            newsItem.urlToImage,
+            categoryy,
+            countriesMap[countryKey]
+        );
+
+        // Firestore logic: Checking favorites asynchronously and dynamically updating status
+        if (currentuserid != null) {
+            db.collection("Favourites")
+                .document(currentuserid)
+                .get()
+                .addOnSuccessListener { document ->
+                    val savedArticles = document.get("favoritesArray") as? List<Map<String, String>> ?: emptyList()
+
+                    Log.d("SavedArticlesDebug", "Retrieved ${savedArticles.size} articles:")
+
+                    // Check if the current article is saved in the user's favorites
+                    var isSaved = savedArticles.any { savedArticle ->
+                        savedArticle["title"] == newsItem.title
+
+                    }
+
+                    // Set initial icon based on saved status
+                    holder.save.setImageResource(if (isSaved) R.drawable.favclicked else R.drawable.fav)
+
+                    // Handle click to save/remove favorites and dynamically toggle saved status
+                    holder.save.setOnClickListener {
+                        isSaved = !isSaved  // Toggle saved status locally
+                        holder.save.setImageResource(if (isSaved) R.drawable.favclicked else R.drawable.fav)
+
+                        // Update Firestore asynchronously based on the new state
+                        if (isSaved) {
+                            favouritesVM.addfavourites(favItem)
+                        } else {
+                            favouritesVM.deletefavourites(favItem)
+                        }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.e("Firestore", "Error retrieving favorites", e)
+                }
+        }
+
+
+
 
     }
 

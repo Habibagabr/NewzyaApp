@@ -81,7 +81,7 @@ class NewsViewModel(private val repository: repository) : ViewModel() {
         withContext(Dispatchers.IO) { // Ensure network calls run in the background
             try {
                 val call = repository.getHeadlines(country, category) // Still a Call<SourceResponse>
-                val response = call.execute() // ✅ Convert it to a synchronous call
+                val response = call.execute() //  Convert it to a synchronous call
 
                 if (response.isSuccessful) {
                     val articles = response.body()?.sources ?: emptyList()
